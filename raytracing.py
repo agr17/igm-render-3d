@@ -29,6 +29,7 @@ w = 400
 h = 300
 
 def normalize(x):
+    x = np.array(x, dtype=np.float64) #asegurarse de que x se convierte a float64
     x /= np.linalg.norm(x)
     return x
 
@@ -63,11 +64,66 @@ def intersect_sphere(O, D, S, R):
             return t1 if t0 < 0 else t0
     return np.inf
 
+def intersect_triangle(O, D, vertices):
+    # Return the distance from O to the intersection of the ray (O, D) with the 
+    # triangle defined by its vertices, or +inf if there is no intersection.
+    # O and vertices are 3D points, D (direction) is a normalized vector.
+
+    v0, v1, v2 = vertices
+
+    # Calcular la normal del triángulo
+    N = np.cross(v1 - v0, v2 - v0)
+    N = normalize(N)
+
+    # Calcular la intersección del triángulo con el plano
+    t = intersect_plane(O, D, v0, N)
+
+    # Si no hay intersección entre el rayo y el triángulo
+    if t == np.inf:
+        return np.inf
+
+    # Calcular el punto de intersección entre el rayo y el triángulo
+    P = O + t * D
+
+    # Comprobar si el punto de intersección está dentro del triángulo
+    if is_inside_triangle(P, v0, v1, v2):
+        return t
+
+    return np.inf
+
+
+def is_inside_triangle(P, v0, v1, v2):
+    # Comprobar si el punto P está dentro del triángulo definido por sus vértices
+    C0 = np.cross(v1 - v0, P - v0)
+    C1 = np.cross(v2 - v1, P - v1)
+    C2 = np.cross(v0 - v2, P - v2)
+
+    if np.dot(C0, C1) >= 0 and np.dot(C1, C2) >= 0 and np.dot(C2, C0) >= 0:
+        return True
+
+    return False
+
 def intersect(O, D, obj):
     if obj['type'] == 'plane':
         return intersect_plane(O, D, obj['position'], obj['normal'])
     elif obj['type'] == 'sphere':
         return intersect_sphere(O, D, obj['position'], obj['radius'])
+    elif obj['type'] == 'triangle':
+        return intersect_triangle(O, D, obj['vertices'])
+
+def get_normal_triangle(vertices):
+    # Return the normal vector of the triangle defined by its vertices.
+    # vertices is a list or tuple of three points representing the vertices of the triangle.
+    
+    v0, v1, v2 = vertices
+    
+    edge1 = v1 - v0
+    edge2 = v2 - v0
+    
+    N = np.cross(edge1, edge2)
+    N = normalize(N)
+    
+    return N
 
 def get_normal(obj, M):
     # Find normal.
@@ -75,6 +131,8 @@ def get_normal(obj, M):
         N = normalize(M - obj['position'])
     elif obj['type'] == 'plane':
         N = obj['normal']
+    elif obj['type'] == 'triangle':
+        N = get_normal_triangle(obj['vertices'])
     return N
     
 def get_color(obj, M):
@@ -135,7 +193,10 @@ def add_plane(position, normal):
         color=lambda M: (color_plane0 
             if (int(M[0] * 2) % 2) == (int(M[2] * 2) % 2) else color_plane1),
         diffuse_c=.75, specular_c=.5, reflection=.25)
-    
+
+def add_triangle(vertices, color):
+    return dict(type='triangle', vertices=np.array(vertices), color=np.array(color), reflection=.5)
+
 # List of objects.
 color_plane0 = 1. * np.ones(3)
 color_plane1 = 0. * np.ones(3)
@@ -143,6 +204,7 @@ scene = [add_sphere([.75, .1, 1.], .6, [0., 0., 1.]),
          add_sphere([-.75, .1, 2.25], .6, [.5, .223, .5]),
          add_sphere([-2.75, .1, 3.5], .6, [1., .572, .184]),
          add_plane([0., -.5, 0.], [0., 1., 0.]),
+         add_triangle([(-0.1, 0., 0.), (0., .25, 0.), (.1, 0., 0.)], (0., 0.5, 0.)),
     ]
 
 # Light position and color.
