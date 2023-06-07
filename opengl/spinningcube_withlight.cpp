@@ -287,11 +287,16 @@ void render(double currentTime) {
 
   // Model matrix
   model_matrix = glm::mat4(1.f);
-  glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model_matrix));
 
   // Moving cube
-  // model_matrix = glm::rotate(model_matrix,
-  //   [...]
+  model_matrix = glm::rotate(model_matrix,
+                          glm::radians(f * 45.0f),
+                          glm::vec3(0.0f, 1.0f, 0.0f));
+  model_matrix = glm::rotate(model_matrix,
+                          glm::radians(f * 81.0f),
+                          glm::vec3(1.0f, 0.0f, 0.0f));
+
+  glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model_matrix));
 
   // View matrix
   view_matrix = glm::lookAt(                 camera_pos,  // pos
