@@ -21,7 +21,7 @@ Para modificar as fontes de luz deberán modificarse as variables L (posición d
 A modo de exemplo, no ficheiro figEj1.png poden verse 3 fontes de luz (unha blanca, unha vermella e unha verde). 
 
 ### Ejercicio 2
-triangle = add_triangle([(x1, y1, z1), (x2, y2, z2), (x3, y3, z3)], (r, g, b))
+triangle = add_triangle([np.array((x1, y1, z1)), np.array((x2, y2, z2)), np.array((x3, y3, z3))], (r, g, b))
 
 (x1, y1, z1), (x2, y2, z2), (x3, y3, z3) son as coordenadas dos vértices do triángulo e (r, g, b) é a cor do triángulo en formato RGB.
 

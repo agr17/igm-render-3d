@@ -28,8 +28,9 @@ import matplotlib.pyplot as plt
 w = 400
 h = 300
 
+view_direction=np.array([0., 0., 0.])
+
 def normalize(x):
-    x = np.array(x, dtype=np.float64) #asegurarse de que x se convierte a float64
     x /= np.linalg.norm(x)
     return x
 
@@ -64,16 +65,12 @@ def intersect_sphere(O, D, S, R):
             return t1 if t0 < 0 else t0
     return np.inf
 
-def intersect_triangle(O, D, vertices):
+def intersect_triangle(O, D, vertices, N):
     # Return the distance from O to the intersection of the ray (O, D) with the 
     # triangle defined by its vertices, or +inf if there is no intersection.
     # O and vertices are 3D points, D (direction) is a normalized vector.
 
     v0, v1, v2 = vertices
-
-    # Calcular la normal del triángulo
-    N = np.cross(v1 - v0, v2 - v0)
-    N = normalize(N)
 
     # Calcular la intersección del triángulo con el plano
     t = intersect_plane(O, D, v0, N)
@@ -109,7 +106,7 @@ def intersect(O, D, obj):
     elif obj['type'] == 'sphere':
         return intersect_sphere(O, D, obj['position'], obj['radius'])
     elif obj['type'] == 'triangle':
-        return intersect_triangle(O, D, obj['vertices'])
+        return intersect_triangle(O, D, obj['vertices'], obj['normal'])
 
 def get_normal_triangle(vertices):
     # Return the normal vector of the triangle defined by its vertices.
@@ -132,7 +129,7 @@ def get_normal(obj, M):
     elif obj['type'] == 'plane':
         N = obj['normal']
     elif obj['type'] == 'triangle':
-        N = get_normal_triangle(obj['vertices'])
+        N = obj['normal']
     return N
     
 def get_color(obj, M):
@@ -194,17 +191,28 @@ def add_plane(position, normal):
             if (int(M[0] * 2) % 2) == (int(M[2] * 2) % 2) else color_plane1),
         diffuse_c=.75, specular_c=.5, reflection=.25)
 
+def is_normal_front_facing(normal):
+    dot_product = np.dot(normal, view_direction)
+    return dot_product >= 0
+
+
 def add_triangle(vertices, color):
-    return dict(type='triangle', vertices=np.array(vertices), color=np.array(color), reflection=.5)
+    # Calcular la normal del triángulo
+    N=get_normal_triangle(vertices)
+    
+    # Verificar que la dirección de la normal sea hacia delante para que se vea el color
+    if not is_normal_front_facing(N):
+        N *= -1
+
+    return dict(type='triangle', vertices=[np.array(v) for v in vertices], color=np.array(color), normal=N, diffuse_c=.75, specular_c=.5, reflection=.25)
 
 # List of objects.
 color_plane0 = 1. * np.ones(3)
 color_plane1 = 0. * np.ones(3)
 scene = [add_sphere([.75, .1, 1.], .6, [0., 0., 1.]),
-         add_sphere([-.75, .1, 2.25], .6, [.5, .223, .5]),
          add_sphere([-2.75, .1, 3.5], .6, [1., .572, .184]),
+         add_triangle([np.array((-1.75, -.5, 2.25)), np.array((-0.75, 1.5, 2.25)), np.array((.25, -.5, 2.25))], (0., 0.5, 0.)),
          add_plane([0., -.5, 0.], [0., 1., 0.]),
-         add_triangle([(-0.1, 0., 0.), (0., .25, 0.), (.1, 0., 0.)], (0., 0.5, 0.)),
     ]
 
 # Light position and color.
@@ -229,15 +237,15 @@ specular_k = 50
 
 depth_max = 5  # Maximum number of light reflections.
 col = np.zeros(3)  # Current color.
-# O = np.array([0., 0.35, -1.])  # Posición de la cámara (frontal).
-O = np.array([0., 100., -200.])  # Posición de la cámara (desde arriba).
-Q = np.array([0., 0., 0.])  # Cámara apuntando al centro de la escena.
+O = np.array([0., 0.35, -1.])  # Posición de la cámara (frontal).
+# O = np.array([0., 100., -200.])  # Posición de la cámara (desde arriba).
+Q = view_direction  # Cámara apuntando al centro de la escena.
 img = np.zeros((h, w, 3))
 
 r = float(w) / h
 # Screen coordinates: x0, y0, x1, y1.
-# S = (-1., -1. / r + .25, 1., 1. / r + .25) # para vista frontal
-S = (-r, -1. + .25, r, 1. + .25) # para vista cenital, ajustar límites de pantalla
+S = (-1., -1. / r + .25, 1., 1. / r + .25) # para vista frontal
+# S = (-r, -1. + .25, r, 1. + .25) # para vista cenital, ajustar límites de pantalla
 
 # Loop through all pixels.
 for i, x in enumerate(np.linspace(S[0], S[2], w)):
