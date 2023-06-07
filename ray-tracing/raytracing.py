@@ -237,15 +237,15 @@ specular_k = 50
 
 depth_max = 5  # Maximum number of light reflections.
 col = np.zeros(3)  # Current color.
-O = np.array([0., 0.35, -1.])  # Posición de la cámara (frontal).
-# O = np.array([0., 100., -200.])  # Posición de la cámara (desde arriba).
+# O = np.array([0., 0.35, -1.])  # Posición de la cámara (frontal).
+O = np.array([0., 100., -200.])  # Posición de la cámara (desde arriba).
 Q = view_direction  # Cámara apuntando al centro de la escena.
 img = np.zeros((h, w, 3))
 
 r = float(w) / h
 # Screen coordinates: x0, y0, x1, y1.
-S = (-1., -1. / r + .25, 1., 1. / r + .25) # para vista frontal
-# S = (-r, -1. + .25, r, 1. + .25) # para vista cenital, ajustar límites de pantalla
+# S = (-1., -1. / r + .25, 1., 1. / r + .25) # para vista frontal
+S = (-r, -1. + .25, r, 1. + .25) # para vista cenital, ajustar límites de pantalla
 
 # Loop through all pixels.
 for i, x in enumerate(np.linspace(S[0], S[2], w)):
