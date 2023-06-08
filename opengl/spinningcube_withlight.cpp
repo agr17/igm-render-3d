@@ -22,7 +22,7 @@ void processInput(GLFWwindow *window);
 void render(double);
 
 GLuint shader_program = 0; // shader program to set render pipeline
-GLuint vao = 0; // Vertext Array Object to set input data
+GLuint vao, tetrahedron_vao = 0; // Vertext Array Object to set input data
 GLint model_location, view_location, proj_location, normal_location, view_pos_location, 
   mat_amb_location, mat_diff_location, mat_spec_location, mat_shine_location, 
   light_amb_location, light_diff_location, light_spec_location, light_pos_location; // Uniforms for transformation matrices
@@ -140,10 +140,6 @@ int main() {
   glDeleteShader(vs);
   glDeleteShader(fs);
 
-  // Vertex Array Object
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
-
   // Cube to be rendered
   //
   //          0        3
@@ -153,7 +149,7 @@ int main() {
   // far ---> 1        2
   //       6        5
   //
-  const GLfloat vertex_positions[] = {
+  const GLfloat cube_vertex_positions[] = {
     -0.25f, -0.25f, -0.25f, // 1
     -0.25f,  0.25f, -0.25f, // 0
      0.25f, -0.25f, -0.25f, // 2
@@ -203,11 +199,42 @@ int main() {
      0.25f,  0.25f, -0.25f  // 3
   };
 
-// Vertex Buffer Object (for vertex coordinates)
+  // Tetrahedron to be rendered (based on cube_vertex_positions)
+  //
+  //                  
+  //            0 <-- top
+  // bottom
+  // left
+  // far --->   1       
+  //       2        3
+  //
+  const GLfloat tetrahedron_vertex_positions[] = {
+    0.f, 0.25f, 0.f, // 0
+    0.f, -0.25f, -0.25f, // 1
+    -0.25f, -0.25f,  0.25f, // 2
+
+    0.f, 0.25f, 0.f, // 0
+    0.f, -0.25f, -0.25f, // 1
+    0.25f, -0.25f,  0.25f, // 3
+
+    0.f, 0.25f, 0.f, // 0
+    -0.25f, -0.25f,  0.25f, // 2
+    0.25f, -0.25f,  0.25f, // 3
+
+    0.f, -0.25f, -0.25f, // 1
+    -0.25f, -0.25f,  0.25f, // 2
+    0.25f, -0.25f,  0.25f, // 3
+  };
+
+  // Vertex Array Object
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+
+  // Vertex Buffer Object (for vertex coordinates)
   GLuint vbo = 0;
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions), vertex_positions, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertex_positions), cube_vertex_positions, GL_STATIC_DRAW);
 
   // Vertex attributes
   // 0: vertex position (x, y, z)
@@ -222,6 +249,31 @@ int main() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   // Unbind vao
+  glBindVertexArray(0);
+
+  // Vertex Array Object (for tetrahedron)
+  glGenVertexArrays(1, &tetrahedron_vao);
+  glBindVertexArray(tetrahedron_vao);
+
+  // Vertex Buffer Object (for vertex tetrahedron coordinates)
+  GLuint tetrahedron_vbo = 0;
+  glGenBuffers(1, &tetrahedron_vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, tetrahedron_vbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(tetrahedron_vertex_positions), tetrahedron_vertex_positions, GL_STATIC_DRAW);
+
+  // Configure the vertex attributes for tetrahedron
+  // 0: vertex position (x, y, z)
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+  glEnableVertexAttribArray(0);
+
+  // 1: vertex normals (x, y, z)
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+  glEnableVertexAttribArray(1);
+
+  // Unbind the VBO for tetrahedron
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+  // Unbind the VAO for tetrahedron
   glBindVertexArray(0);
 
   // Uniforms
@@ -267,9 +319,8 @@ void render(double currentTime) {
   glViewport(0, 0, gl_width, gl_height);
 
   glUseProgram(shader_program);
-  glBindVertexArray(vao);
 
-  glm::mat4 model_matrix, view_matrix, proj_matrix;
+  glm::mat4 model_matrix, view_matrix, proj_matrix, model_triangle, model_tetrahedron;
   glm::mat3 normal_matrix;
 
   // Uniforms
@@ -284,6 +335,8 @@ void render(double currentTime) {
   glUniform3f(light_diff_location, light_diffuse.x, light_diffuse.y, light_diffuse.z);
   glUniform3f(light_spec_location, light_specular.x, light_specular.y, light_specular.z);
   glUniform3f(light_pos_location, light_pos.x, light_pos.y, light_pos.z);
+
+  glBindVertexArray(vao);
 
   // Model matrix
   model_matrix = glm::mat4(1.f);
@@ -312,8 +365,34 @@ void render(double currentTime) {
 
   // Normal matrix: normal vectors to world coordinates
   normal_matrix = glm::transpose(glm::mat3(model_matrix));
-  glUniformMatrix3fv(normal_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));                        
-  
+  glUniformMatrix3fv(normal_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));        
+
+  glDrawArrays(GL_TRIANGLES, 0, 36); // pintamos el cubo           
+
+  // Bind tetrahedron vao
+  glBindVertexArray(tetrahedron_vao);
+
+  // Model tetrahedron
+  model_tetrahedron = glm::mat4(1.f);
+
+  model_tetrahedron = glm::translate(model_tetrahedron,
+                                     glm::vec3(-1.0f, 0.0f, 0.0f));
+
+  // Moving tetrahedron
+  model_tetrahedron = glm::rotate(model_tetrahedron,
+                                  glm::radians(f * 45.0f),
+                                  glm::vec3(0.0f, 1.0f, 0.0f));
+
+  model_tetrahedron = glm::rotate(model_tetrahedron,
+                                  glm::radians(f * 81.0f),
+                                  glm::vec3(1.0f, 0.0f, 0.0f));
+
+  glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model_tetrahedron));  
+
+  // Normal matrix: normal vectors to world coordinates
+  normal_matrix = glm::transpose(glm::mat3(model_tetrahedron));
+  glUniformMatrix3fv(normal_location, 1, GL_FALSE, glm::value_ptr(normal_matrix)); 
+
   glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
