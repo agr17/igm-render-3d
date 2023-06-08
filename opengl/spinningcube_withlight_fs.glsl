@@ -21,10 +21,11 @@ in vec3 vs_normal;
 in vec2 vs_tex_coord;
 
 uniform Material material;
-uniform Light light;
+uniform Light light_1;
+uniform Light light_2;
 uniform vec3 view_pos;
 
-void main() {
+vec3 calculateLight(Light light) {
   // Ambient
   vec3 ambient = light.ambient * material.ambient;
 
@@ -40,6 +41,11 @@ void main() {
   float spec = pow(max(dot(view_dir, reflect_dir), 0.0), material.shininess);
   vec3 specular = light.specular * spec * material.specular;
 
-  vec3 result = ambient + diffuse + specular;
+  return ambient + diffuse + specular;
+}
+
+void main() {
+  vec3 result = calculateLight(light_1);
+  result += calculateLight(light_2);
   frag_col = vec4(result, 1.0);
 }

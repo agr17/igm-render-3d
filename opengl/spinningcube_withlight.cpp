@@ -25,7 +25,8 @@ GLuint shader_program = 0; // shader program to set render pipeline
 GLuint vao, tetrahedron_vao = 0; // Vertext Array Object to set input data
 GLint model_location, view_location, proj_location, normal_location, view_pos_location, 
   mat_amb_location, mat_diff_location, mat_spec_location, mat_shine_location, 
-  light_amb_location, light_diff_location, light_spec_location, light_pos_location; // Uniforms for transformation matrices
+  light_amb_location, light_diff_location, light_spec_location, light_pos_location,
+  light_2_amb_location, light_2_diff_location, light_2_spec_location, light_2_pos_location; // Uniforms for transformation matrices
 
 // Shader names
 const char *vertexFileName = "spinningcube_withlight_vs.glsl";
@@ -39,6 +40,8 @@ glm::vec3 light_pos(1.2f, 1.0f, 2.0f);
 glm::vec3 light_ambient(0.2f, 0.2f, 0.2f);
 glm::vec3 light_diffuse(0.5f, 0.5f, 0.5f);
 glm::vec3 light_specular(1.0f, 1.0f, 1.0f);
+
+glm::vec3 light_2_pos(-1.2f, 1.0f, 2.0f);
 
 // Material
 glm::vec3 material_ambient(1.0f, 0.5f, 0.31f);
@@ -284,15 +287,20 @@ int main() {
   normal_location = glGetUniformLocation(shader_program, "normal_to_world");
   view_pos_location = glGetUniformLocation(shader_program, "view_pos");
 
-  light_amb_location = glGetUniformLocation(shader_program, "light.ambient");
-  light_diff_location = glGetUniformLocation(shader_program, "light.diffuse");
-  light_spec_location = glGetUniformLocation(shader_program, "light.specular");
-  light_pos_location = glGetUniformLocation(shader_program, "light.position");
+  light_amb_location = glGetUniformLocation(shader_program, "light_1.ambient");
+  light_diff_location = glGetUniformLocation(shader_program, "light_1.diffuse");
+  light_spec_location = glGetUniformLocation(shader_program, "light_1.specular");
+  light_pos_location = glGetUniformLocation(shader_program, "light_1.position");
 
   mat_amb_location = glGetUniformLocation(shader_program, "material.ambient");
   mat_diff_location = glGetUniformLocation(shader_program, "material.diffuse");
   mat_spec_location = glGetUniformLocation(shader_program, "material.specular");
   mat_shine_location = glGetUniformLocation(shader_program, "material.shininess");
+
+  light_2_amb_location = glGetUniformLocation(shader_program, "light_2.ambient");
+  light_2_diff_location = glGetUniformLocation(shader_program, "light_2.diffuse");
+  light_2_spec_location = glGetUniformLocation(shader_program, "light_2.specular");
+  light_2_pos_location = glGetUniformLocation(shader_program, "light_2.position");
 
 // Render loop
   while(!glfwWindowShouldClose(window)) {
@@ -335,6 +343,11 @@ void render(double currentTime) {
   glUniform3f(light_diff_location, light_diffuse.x, light_diffuse.y, light_diffuse.z);
   glUniform3f(light_spec_location, light_specular.x, light_specular.y, light_specular.z);
   glUniform3f(light_pos_location, light_pos.x, light_pos.y, light_pos.z);
+
+  glUniform3f(light_2_amb_location, light_ambient.x, light_ambient.y, light_ambient.z);
+  glUniform3f(light_2_diff_location, light_diffuse.x, light_diffuse.y, light_diffuse.z);
+  glUniform3f(light_2_spec_location, light_specular.x, light_specular.y, light_specular.z);
+  glUniform3f(light_2_pos_location, light_2_pos.x, light_2_pos.y, light_2_pos.z);
 
   glBindVertexArray(vao);
 
