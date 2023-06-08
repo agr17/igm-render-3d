@@ -226,7 +226,7 @@ int main() {
     0.25f, -0.25f,  0.25f, // 3
   };
 
-  // Vertex Array Object
+  // Vertex Array Object (for cube)
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
 
@@ -364,7 +364,7 @@ void render(double currentTime) {
   glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj_matrix));
 
   // Normal matrix: normal vectors to world coordinates
-  normal_matrix = glm::transpose(glm::mat3(model_matrix));
+  normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_matrix)));
   glUniformMatrix3fv(normal_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));        
 
   glDrawArrays(GL_TRIANGLES, 0, 36); // pintamos el cubo           
@@ -390,7 +390,7 @@ void render(double currentTime) {
   glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model_tetrahedron));  
 
   // Normal matrix: normal vectors to world coordinates
-  normal_matrix = glm::transpose(glm::mat3(model_tetrahedron));
+  normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_tetrahedron)));
   glUniformMatrix3fv(normal_location, 1, GL_FALSE, glm::value_ptr(normal_matrix)); 
 
   glDrawArrays(GL_TRIANGLES, 0, 36);
