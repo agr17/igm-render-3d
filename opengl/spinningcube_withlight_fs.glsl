@@ -25,6 +25,8 @@ uniform Light light_1;
 uniform Light light_2;
 uniform vec3 view_pos;
 
+uniform sampler2D theTexture;
+
 vec3 calculateLight(Light light) {
   // Ambient
   vec3 ambient = light.ambient * material.ambient;
@@ -47,5 +49,7 @@ vec3 calculateLight(Light light) {
 void main() {
   vec3 result = calculateLight(light_1);
   result += calculateLight(light_2);
-  frag_col = vec4(result, 1.0);
+  // frag_col = vec4(result, 1.0);
+
+  frag_col = texture(theTexture, vs_tex_coord);
 }

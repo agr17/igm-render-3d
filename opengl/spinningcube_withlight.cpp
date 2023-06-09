@@ -14,6 +14,10 @@
 
 #include "textfile_ALT.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#define IMG_PATH "texture.jpg"
+#include "stb_image.h"
+
 int gl_width = 640;
 int gl_height = 480;
 
@@ -23,6 +27,7 @@ void render(double);
 
 GLuint shader_program = 0; // shader program to set render pipeline
 GLuint vao, tetrahedron_vao = 0; // Vertext Array Object to set input data
+GLuint texture = 0; // Texture object
 GLint model_location, view_location, proj_location, normal_location, view_pos_location, 
   mat_amb_location, mat_diff_location, mat_spec_location, mat_shine_location, 
   light_amb_location, light_diff_location, light_spec_location, light_pos_location,
@@ -202,6 +207,65 @@ int main() {
      0.25f,  0.25f, -0.25f  // 3
   };
 
+  // Cube to be rendered
+  //
+  //          0        3
+  //       7        4 <-- top-right-near
+  // bottom
+  // left
+  // far ---> 1        2
+  //       6        5
+  //
+  const GLfloat cube_tex_coords[] = {
+     1.0f, 0.0f, // 1
+     1.0f, 1.0f, // 0
+     0.0f, 0.0f, // 2
+
+     0.0f, 1.0f, // 3
+     0.0f, 0.0f, // 2
+     1.0f, 1.0f, // 0
+
+     1.0f, 0.0f, // 2
+     1.0f, 1.0f, // 3
+     0.0f, 0.0f, // 5
+
+     0.0f, 1.0f, // 4
+     0.0f, 0.0f, // 5
+     1.0f, 1.0f, // 3
+
+     1.0f, 0.0f, // 5
+     1.0f, 1.0f, // 4
+     0.0f, 0.0f, // 6
+
+     0.0f, 1.0f, // 7
+     0.0f, 0.0f, // 6
+     1.0f, 1.0f, // 4
+
+     1.0f, 0.0f, // 6
+     1.0f, 1.0f, // 7
+     0.0f, 0.0f, // 1
+
+     0.0f, 1.0f, // 0
+     0.0f, 0.0f, // 1
+     1.0f, 1.0f, // 7
+
+     1.0f, 1.0f, // 2
+     1.0f, 0.0f, // 5
+     0.0f, 1.0f, // 1
+
+     0.0f, 0.0f, // 6
+     0.0f, 1.0f, // 1
+     1.0f, 0.0f, // 5
+
+     1.0f, 0.0f, // 4
+     1.0f, 1.0f, // 3
+     0.0f, 0.0f, // 7
+
+     0.0f, 1.0f, // 0
+     0.0f, 0.0f, // 7
+     1.0f, 1.0f // 3
+  };
+
   // Tetrahedron to be rendered (based on cube_vertex_positions)
   //
   //                  
@@ -229,14 +293,34 @@ int main() {
     0.25f, -0.25f,  0.25f, // 3
   };
 
+  const GLfloat tetrahedron_tex_coords[] = {
+    0.5f, 1.0f, // 0
+    0.f, 0.f, // 1
+    1.f, 0.f, // 2
+
+    0.5f, 1.0f, // 0
+    1.f, 0.f, // 1
+    0.f, 0.f, // 3
+
+    0.5f, 1.0f, // 0
+    0.f, 0.f, // 2
+    1.f, 0.f, // 3
+
+    0.5f, 1.0f, // 1
+    0.f, 0.f, // 2
+    1.f, 0.f, // 3
+  };
+
   // Vertex Array Object (for cube)
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
 
   // Vertex Buffer Object (for vertex coordinates)
-  GLuint vbo = 0;
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  GLuint vbo[2];
+  glGenBuffers(1, vbo);
+
+  // VBO: 3D vertices
+  glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
   glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertex_positions), cube_vertex_positions, GL_STATIC_DRAW);
 
   // Vertex attributes
@@ -247,6 +331,14 @@ int main() {
   // 1: vertex normals (x, y, z)
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
   glEnableVertexAttribArray(1);
+
+  // VBO: texture coords
+  glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(cube_tex_coords), cube_tex_coords, GL_STATIC_DRAW);
+
+  // 2: texture coordinates (u, v)
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+	glEnableVertexAttribArray(2);
 
   // Unbind vbo (it was conveniently registered by VertexAttribPointer)
   glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -259,9 +351,11 @@ int main() {
   glBindVertexArray(tetrahedron_vao);
 
   // Vertex Buffer Object (for vertex tetrahedron coordinates)
-  GLuint tetrahedron_vbo = 0;
-  glGenBuffers(1, &tetrahedron_vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, tetrahedron_vbo);
+  GLuint tetrahedron_vbo[2];
+  glGenBuffers(1, tetrahedron_vbo);
+
+  // VBO: 3D vertices
+  glBindBuffer(GL_ARRAY_BUFFER, tetrahedron_vbo[0]);
   glBufferData(GL_ARRAY_BUFFER, sizeof(tetrahedron_vertex_positions), tetrahedron_vertex_positions, GL_STATIC_DRAW);
 
   // Configure the vertex attributes for tetrahedron
@@ -272,6 +366,14 @@ int main() {
   // 1: vertex normals (x, y, z)
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
   glEnableVertexAttribArray(1);
+
+  // VBO: texture coords
+  glBindBuffer(GL_ARRAY_BUFFER, tetrahedron_vbo[1]);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(tetrahedron_tex_coords), tetrahedron_tex_coords, GL_STATIC_DRAW);
+
+  // 2: texture coordinates (u, v)
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+  glEnableVertexAttribArray(2);
 
   // Unbind the VBO for tetrahedron
   glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -302,7 +404,36 @@ int main() {
   light_2_spec_location = glGetUniformLocation(shader_program, "light_2.specular");
   light_2_pos_location = glGetUniformLocation(shader_program, "light_2.position");
 
-// Render loop
+  // Create texture object
+  glGenTextures(1, &texture);
+  glBindTexture(GL_TEXTURE_2D, texture);
+
+  // Set the texture wrapping/filtering options (on the currently bound texture object)
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  // Load image for texture
+  int width, height, nrChannels;
+  // Before loading the image, we flip it vertically because
+  // Images: 0.0 top of y-axis  OpenGL: 0.0 bottom of y-axis
+  stbi_set_flip_vertically_on_load(1);
+  unsigned char *data = stbi_load(IMG_PATH, &width, &height, &nrChannels, 0);
+  // Image from http://www.flickr.com/photos/seier/4364156221
+  // CC-BY-SA 2.0
+  if (data) {
+    // Generate texture from image
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+  } else {
+    printf("Failed to load texture\n");
+  }
+
+  // Free image once texture is generated
+  stbi_image_free(data);
+
+  // Render loop
   while(!glfwWindowShouldClose(window)) {
 
     processInput(window);
