@@ -158,47 +158,47 @@ int main() {
   //       6        5
   //
   const GLfloat cube_vertex_positions[] = {
-    -0.25f, -0.25f, -0.25f, 1.0f, 0.0f, // 1
-    -0.25f,  0.25f, -0.25f, 1.0f, 1.0f, // 0
-     0.25f, -0.25f, -0.25f, 0.0f, 0.0f, // 2
-     0.25f,  0.25f, -0.25f, 0.0f, 1.0f, // 3
-     0.25f, -0.25f, -0.25f, 0.0f, 0.0f, // 2
-    -0.25f,  0.25f, -0.25f, 1.0f, 1.0f, // 0
+    -0.25f, -0.25f, -0.25f, 0.0f,  0.0f, -1.0f, 1.0f, 0.0f, // 1
+    -0.25f,  0.25f, -0.25f, 0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // 0
+     0.25f, -0.25f, -0.25f, 0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // 2
+     0.25f,  0.25f, -0.25f, 0.0f,  0.0f, -1.0f, 0.0f, 1.0f, // 3
+     0.25f, -0.25f, -0.25f, 0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // 2
+    -0.25f,  0.25f, -0.25f, 0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // 0
 
-     0.25f, -0.25f, -0.25f, 1.0f, 0.0f, // 2
-     0.25f,  0.25f, -0.25f, 1.0f, 1.0f, // 3
-     0.25f, -0.25f,  0.25f, 0.0f, 0.0f, // 5
-     0.25f,  0.25f,  0.25f, 0.0f, 1.0f, // 4
-     0.25f, -0.25f,  0.25f, 0.0f, 0.0f, // 5
-     0.25f,  0.25f, -0.25f, 1.0f, 1.0f, // 3
+     0.25f, -0.25f, -0.25f, 1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // 2
+     0.25f,  0.25f, -0.25f, 1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // 3
+     0.25f, -0.25f,  0.25f, 1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // 5
+     0.25f,  0.25f,  0.25f, 1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // 4
+     0.25f, -0.25f,  0.25f, 1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // 5
+     0.25f,  0.25f, -0.25f, 1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // 3
 
-     0.25f, -0.25f,  0.25f, 1.0f, 0.0f, // 5
-     0.25f,  0.25f,  0.25f, 1.0f, 1.0f, // 4
-    -0.25f, -0.25f,  0.25f, 0.0f, 0.0f, // 6
-    -0.25f,  0.25f,  0.25f, 0.0f, 1.0f, // 7
-    -0.25f, -0.25f,  0.25f, 0.0f, 0.0f, // 6
-     0.25f,  0.25f,  0.25f, 1.0f, 1.0f, // 4
+     0.25f, -0.25f,  0.25f, 0.0f,  0.0f,  1.0f, 1.0f, 0.0f, // 5
+     0.25f,  0.25f,  0.25f, 0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // 4
+    -0.25f, -0.25f,  0.25f, 0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // 6
+    -0.25f,  0.25f,  0.25f, 0.0f,  0.0f,  1.0f, 0.0f, 1.0f, // 7
+    -0.25f, -0.25f,  0.25f, 0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // 6
+     0.25f,  0.25f,  0.25f, 0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // 4
 
-    -0.25f, -0.25f,  0.25f, 1.0f, 0.0f, // 6
-    -0.25f,  0.25f,  0.25f, 1.0f, 1.0f, // 7
-    -0.25f, -0.25f, -0.25f, 0.0f, 0.0f, // 1
-    -0.25f,  0.25f, -0.25f, 0.0f, 1.0f, // 0
-    -0.25f, -0.25f, -0.25f, 0.0f, 0.0f, // 1
-    -0.25f,  0.25f,  0.25f, 1.0f, 1.0f, // 7
+    -0.25f, -0.25f,  0.25f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // 6
+    -0.25f,  0.25f,  0.25f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // 7
+    -0.25f, -0.25f, -0.25f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // 1
+    -0.25f,  0.25f, -0.25f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // 0
+    -0.25f, -0.25f, -0.25f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // 1
+    -0.25f,  0.25f,  0.25f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // 7
 
-     0.25f, -0.25f, -0.25f, 1.0f, 1.0f, // 2
-     0.25f, -0.25f,  0.25f, 1.0f, 0.0f, // 5
-    -0.25f, -0.25f, -0.25f, 0.0f, 1.0f, // 1
-    -0.25f, -0.25f,  0.25f, 0.0f, 0.0f, // 6
-    -0.25f, -0.25f, -0.25f, 0.0f, 1.0f, // 1
-     0.25f, -0.25f,  0.25f, 1.0f, 0.0f, // 5
+     0.25f, -0.25f, -0.25f, 0.0f, -1.0f,  0.0f, 1.0f, 1.0f, // 2
+     0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // 5
+    -0.25f, -0.25f, -0.25f, 0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // 1
+    -0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // 6
+    -0.25f, -0.25f, -0.25f, 0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // 1
+     0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // 5
 
-     0.25f,  0.25f,  0.25f, 1.0f, 0.0f, // 4
-     0.25f,  0.25f, -0.25f, 1.0f, 1.0f, // 3
-    -0.25f,  0.25f,  0.25f, 0.0f, 0.0f, // 7
-    -0.25f,  0.25f, -0.25f, 0.0f, 1.0f, // 0
-    -0.25f,  0.25f,  0.25f, 0.0f, 0.0f, // 7
-     0.25f,  0.25f, -0.25f,  1.0f, 1.0f  // 3
+     0.25f,  0.25f,  0.25f, 0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // 4
+     0.25f,  0.25f, -0.25f, 0.0f,  1.0f,  0.0f, 1.0f, 1.0f, // 3
+    -0.25f,  0.25f,  0.25f, 0.0f,  1.0f,  0.0f, 0.0f, 0.0f, // 7
+    -0.25f,  0.25f, -0.25f, 0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // 0
+    -0.25f,  0.25f,  0.25f, 0.0f,  1.0f,  0.0f, 0.0f, 0.0f, // 7
+     0.25f,  0.25f, -0.25f, 0.0f,  1.0f,  0.0f, 1.0f, 1.0f  // 3
   };
 
   // Tetrahedron to be rendered (based on cube_vertex_positions)
@@ -211,21 +211,28 @@ int main() {
   //       2        3
   //
   const GLfloat tetrahedron_vertex_positions[] = {
-    0.f, 0.25f, 0.f, 0.5f, 1.0f, // 0
-    0.f, -0.25f, -0.25f, 0.f, 0.f, // 1
-    -0.25f, -0.25f,  0.25f, 1.f, 0.f, // 2
+    // ec. plano: 16x - 4y + 8z + 1 = 0
+    // vec. normal: (16, -4, 8) -> invertir direccion
+    // vec. normalizado: (0.873f, -0.218f, 0.436f)
+    0.f, 0.25f, 0.f, -0.873f, 0.218f, -0.436f, 0.5f, 1.0f, // 0
+    0.f, -0.25f, -0.25f, -0.873f, 0.218f, -0.436f, 0.f, 0.f, // 1
+    -0.25f, -0.25f,  0.25f, -0.873f, 0.218f, -0.436f, 1.f, 0.f, // 2
 
-    0.f, 0.25f, 0.f, 0.5f, 1.0f, // 0
-    0.f, -0.25f, -0.25f, 1.f, 0.f, // 1
-    0.25f, -0.25f,  0.25f, 0.f, 0.f, // 3
+    // ec. plano: 16x + 4y - 8z - 1 = 0
+    // vec. normal: (16, 4, -8)
+    0.f, 0.25f, 0.f, 0.873f, 0.218f, -0.436f, 0.5f, 1.0f, // 0
+    0.f, -0.25f, -0.25f, 0.873f, 0.218f, -0.436f, 1.f, 0.f, // 1
+    0.25f, -0.25f,  0.25f, 0.873f, 0.218f, -0.436f, 0.f, 0.f, // 3
 
-    0.f, 0.25f, 0.f, 0.5f, 1.0f, // 0
-    -0.25f, -0.25f,  0.25f, 0.f, 0.f, // 2
-    0.25f, -0.25f,  0.25f, 1.f, 0.f, // 3
+    // ec. plano: 4y + 8z - 1 = 0
+    // vec. normal: (0, 4, 8)
+    0.f, 0.25f, 0.f, 0.0f, 0.447f, 0.894f, 0.5f, 1.0f, // 0
+    -0.25f, -0.25f, 0.25f, 0.447f, 0.894f, 0.25f, 0.f, 0.f, // 2
+    0.25f, -0.25f, 0.25f, 0.447f, 0.894f, 0.25f, 1.f, 0.f, // 3
 
-    0.f, -0.25f, -0.25f, 0.5f, 1.0f, // 1
-    -0.25f, -0.25f,  0.25f, 0.f, 0.f, // 2
-    0.25f, -0.25f,  0.25f, 1.f, 0.f // 3
+    0.f, -0.25f, -0.25f, 0.0f, -1.0f,  0.0f, 0.5f, 1.0f, // 1
+    -0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, 0.f, 0.f, // 2
+    0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, 1.f, 0.f // 3
   };
 
   // Vertex Array Object (for cube)
@@ -240,15 +247,15 @@ int main() {
 
   // Vertex attributes
   // 0: vertex position (x, y, z)
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 
   // 1: vertex normals (x, y, z)
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
 
   // 2: texture coordinates (u, v)
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
   // Unbind vbo (it was conveniently registered by VertexAttribPointer)
@@ -267,18 +274,18 @@ int main() {
   glBindBuffer(GL_ARRAY_BUFFER, tetrahedron_vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(tetrahedron_vertex_positions), tetrahedron_vertex_positions, GL_STATIC_DRAW);
 
-  // Configure the vertex attributes for tetrahedron
+  // Vertex attributes
   // 0: vertex position (x, y, z)
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 
   // 1: vertex normals (x, y, z)
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
 
   // 2: texture coordinates (u, v)
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-  glEnableVertexAttribArray(2);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
   // Unbind the VBO for tetrahedron
   glBindBuffer(GL_ARRAY_BUFFER, 0);
