@@ -158,112 +158,47 @@ int main() {
   //       6        5
   //
   const GLfloat cube_vertex_positions[] = {
-    -0.25f, -0.25f, -0.25f, // 1
-    -0.25f,  0.25f, -0.25f, // 0
-     0.25f, -0.25f, -0.25f, // 2
+    -0.25f, -0.25f, -0.25f, 1.0f, 0.0f, // 1
+    -0.25f,  0.25f, -0.25f, 1.0f, 1.0f, // 0
+     0.25f, -0.25f, -0.25f, 0.0f, 0.0f, // 2
+     0.25f,  0.25f, -0.25f, 0.0f, 1.0f, // 3
+     0.25f, -0.25f, -0.25f, 0.0f, 0.0f, // 2
+    -0.25f,  0.25f, -0.25f, 1.0f, 1.0f, // 0
 
-     0.25f,  0.25f, -0.25f, // 3
-     0.25f, -0.25f, -0.25f, // 2
-    -0.25f,  0.25f, -0.25f, // 0
+     0.25f, -0.25f, -0.25f, 1.0f, 0.0f, // 2
+     0.25f,  0.25f, -0.25f, 1.0f, 1.0f, // 3
+     0.25f, -0.25f,  0.25f, 0.0f, 0.0f, // 5
+     0.25f,  0.25f,  0.25f, 0.0f, 1.0f, // 4
+     0.25f, -0.25f,  0.25f, 0.0f, 0.0f, // 5
+     0.25f,  0.25f, -0.25f, 1.0f, 1.0f, // 3
 
-     0.25f, -0.25f, -0.25f, // 2
-     0.25f,  0.25f, -0.25f, // 3
-     0.25f, -0.25f,  0.25f, // 5
+     0.25f, -0.25f,  0.25f, 1.0f, 0.0f, // 5
+     0.25f,  0.25f,  0.25f, 1.0f, 1.0f, // 4
+    -0.25f, -0.25f,  0.25f, 0.0f, 0.0f, // 6
+    -0.25f,  0.25f,  0.25f, 0.0f, 1.0f, // 7
+    -0.25f, -0.25f,  0.25f, 0.0f, 0.0f, // 6
+     0.25f,  0.25f,  0.25f, 1.0f, 1.0f, // 4
 
-     0.25f,  0.25f,  0.25f, // 4
-     0.25f, -0.25f,  0.25f, // 5
-     0.25f,  0.25f, -0.25f, // 3
+    -0.25f, -0.25f,  0.25f, 1.0f, 0.0f, // 6
+    -0.25f,  0.25f,  0.25f, 1.0f, 1.0f, // 7
+    -0.25f, -0.25f, -0.25f, 0.0f, 0.0f, // 1
+    -0.25f,  0.25f, -0.25f, 0.0f, 1.0f, // 0
+    -0.25f, -0.25f, -0.25f, 0.0f, 0.0f, // 1
+    -0.25f,  0.25f,  0.25f, 1.0f, 1.0f, // 7
 
-     0.25f, -0.25f,  0.25f, // 5
-     0.25f,  0.25f,  0.25f, // 4
-    -0.25f, -0.25f,  0.25f, // 6
+     0.25f, -0.25f, -0.25f, 1.0f, 1.0f, // 2
+     0.25f, -0.25f,  0.25f, 1.0f, 0.0f, // 5
+    -0.25f, -0.25f, -0.25f, 0.0f, 1.0f, // 1
+    -0.25f, -0.25f,  0.25f, 0.0f, 0.0f, // 6
+    -0.25f, -0.25f, -0.25f, 0.0f, 1.0f, // 1
+     0.25f, -0.25f,  0.25f, 1.0f, 0.0f, // 5
 
-    -0.25f,  0.25f,  0.25f, // 7
-    -0.25f, -0.25f,  0.25f, // 6
-     0.25f,  0.25f,  0.25f, // 4
-
-    -0.25f, -0.25f,  0.25f, // 6
-    -0.25f,  0.25f,  0.25f, // 7
-    -0.25f, -0.25f, -0.25f, // 1
-
-    -0.25f,  0.25f, -0.25f, // 0
-    -0.25f, -0.25f, -0.25f, // 1
-    -0.25f,  0.25f,  0.25f, // 7
-
-     0.25f, -0.25f, -0.25f, // 2
-     0.25f, -0.25f,  0.25f, // 5
-    -0.25f, -0.25f, -0.25f, // 1
-
-    -0.25f, -0.25f,  0.25f, // 6
-    -0.25f, -0.25f, -0.25f, // 1
-     0.25f, -0.25f,  0.25f, // 5
-
-     0.25f,  0.25f,  0.25f, // 4
-     0.25f,  0.25f, -0.25f, // 3
-    -0.25f,  0.25f,  0.25f, // 7
-
-    -0.25f,  0.25f, -0.25f, // 0
-    -0.25f,  0.25f,  0.25f, // 7
-     0.25f,  0.25f, -0.25f  // 3
-  };
-
-  // Cube to be rendered
-  //
-  //          0        3
-  //       7        4 <-- top-right-near
-  // bottom
-  // left
-  // far ---> 1        2
-  //       6        5
-  //
-  const GLfloat cube_tex_coords[] = {
-     1.0f, 0.0f, // 1
-     1.0f, 1.0f, // 0
-     0.0f, 0.0f, // 2
-
-     0.0f, 1.0f, // 3
-     0.0f, 0.0f, // 2
-     1.0f, 1.0f, // 0
-
-     1.0f, 0.0f, // 2
-     1.0f, 1.0f, // 3
-     0.0f, 0.0f, // 5
-
-     0.0f, 1.0f, // 4
-     0.0f, 0.0f, // 5
-     1.0f, 1.0f, // 3
-
-     1.0f, 0.0f, // 5
-     1.0f, 1.0f, // 4
-     0.0f, 0.0f, // 6
-
-     0.0f, 1.0f, // 7
-     0.0f, 0.0f, // 6
-     1.0f, 1.0f, // 4
-
-     1.0f, 0.0f, // 6
-     1.0f, 1.0f, // 7
-     0.0f, 0.0f, // 1
-
-     0.0f, 1.0f, // 0
-     0.0f, 0.0f, // 1
-     1.0f, 1.0f, // 7
-
-     1.0f, 1.0f, // 2
-     1.0f, 0.0f, // 5
-     0.0f, 1.0f, // 1
-
-     0.0f, 0.0f, // 6
-     0.0f, 1.0f, // 1
-     1.0f, 0.0f, // 5
-
-     1.0f, 0.0f, // 4
-     1.0f, 1.0f, // 3
-     0.0f, 0.0f, // 7
-
-     0.0f, 1.0f, // 0
-     0.0f, 0.0f, // 7
-     1.0f, 1.0f // 3
+     0.25f,  0.25f,  0.25f, 1.0f, 0.0f, // 4
+     0.25f,  0.25f, -0.25f, 1.0f, 1.0f, // 3
+    -0.25f,  0.25f,  0.25f, 0.0f, 0.0f, // 7
+    -0.25f,  0.25f, -0.25f, 0.0f, 1.0f, // 0
+    -0.25f,  0.25f,  0.25f, 0.0f, 0.0f, // 7
+     0.25f,  0.25f, -0.25f,  1.0f, 1.0f  // 3
   };
 
   // Tetrahedron to be rendered (based on cube_vertex_positions)
@@ -276,39 +211,21 @@ int main() {
   //       2        3
   //
   const GLfloat tetrahedron_vertex_positions[] = {
-    0.f, 0.25f, 0.f, // 0
-    0.f, -0.25f, -0.25f, // 1
-    -0.25f, -0.25f,  0.25f, // 2
+    0.f, 0.25f, 0.f, 0.5f, 1.0f, // 0
+    0.f, -0.25f, -0.25f, 0.f, 0.f, // 1
+    -0.25f, -0.25f,  0.25f, 1.f, 0.f, // 2
 
-    0.f, 0.25f, 0.f, // 0
-    0.f, -0.25f, -0.25f, // 1
-    0.25f, -0.25f,  0.25f, // 3
+    0.f, 0.25f, 0.f, 0.5f, 1.0f, // 0
+    0.f, -0.25f, -0.25f, 1.f, 0.f, // 1
+    0.25f, -0.25f,  0.25f, 0.f, 0.f, // 3
 
-    0.f, 0.25f, 0.f, // 0
-    -0.25f, -0.25f,  0.25f, // 2
-    0.25f, -0.25f,  0.25f, // 3
+    0.f, 0.25f, 0.f, 0.5f, 1.0f, // 0
+    -0.25f, -0.25f,  0.25f, 0.f, 0.f, // 2
+    0.25f, -0.25f,  0.25f, 1.f, 0.f, // 3
 
-    0.f, -0.25f, -0.25f, // 1
-    -0.25f, -0.25f,  0.25f, // 2
-    0.25f, -0.25f,  0.25f, // 3
-  };
-
-  const GLfloat tetrahedron_tex_coords[] = {
-    0.5f, 1.0f, // 0
-    0.f, 0.f, // 1
-    1.f, 0.f, // 2
-
-    0.5f, 1.0f, // 0
-    1.f, 0.f, // 1
-    0.f, 0.f, // 3
-
-    0.5f, 1.0f, // 0
-    0.f, 0.f, // 2
-    1.f, 0.f, // 3
-
-    0.5f, 1.0f, // 1
-    0.f, 0.f, // 2
-    1.f, 0.f, // 3
+    0.f, -0.25f, -0.25f, 0.5f, 1.0f, // 1
+    -0.25f, -0.25f,  0.25f, 0.f, 0.f, // 2
+    0.25f, -0.25f,  0.25f, 1.f, 0.f // 3
   };
 
   // Vertex Array Object (for cube)
@@ -316,28 +233,22 @@ int main() {
   glBindVertexArray(vao);
 
   // Vertex Buffer Object (for vertex coordinates)
-  GLuint vbo[2];
-  glGenBuffers(1, vbo);
-
-  // VBO: 3D vertices
-  glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+  GLuint vbo = 0;
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertex_positions), cube_vertex_positions, GL_STATIC_DRAW);
 
   // Vertex attributes
   // 0: vertex position (x, y, z)
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 
   // 1: vertex normals (x, y, z)
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(1);
 
-  // VBO: texture coords
-  glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(cube_tex_coords), cube_tex_coords, GL_STATIC_DRAW);
-
   // 2: texture coordinates (u, v)
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
   // Unbind vbo (it was conveniently registered by VertexAttribPointer)
@@ -351,28 +262,22 @@ int main() {
   glBindVertexArray(tetrahedron_vao);
 
   // Vertex Buffer Object (for vertex tetrahedron coordinates)
-  GLuint tetrahedron_vbo[2];
-  glGenBuffers(1, tetrahedron_vbo);
-
-  // VBO: 3D vertices
-  glBindBuffer(GL_ARRAY_BUFFER, tetrahedron_vbo[0]);
+  GLuint tetrahedron_vbo = 0;
+  glGenBuffers(1, &tetrahedron_vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, tetrahedron_vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(tetrahedron_vertex_positions), tetrahedron_vertex_positions, GL_STATIC_DRAW);
 
   // Configure the vertex attributes for tetrahedron
   // 0: vertex position (x, y, z)
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 
   // 1: vertex normals (x, y, z)
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(1);
 
-  // VBO: texture coords
-  glBindBuffer(GL_ARRAY_BUFFER, tetrahedron_vbo[1]);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(tetrahedron_tex_coords), tetrahedron_tex_coords, GL_STATIC_DRAW);
-
   // 2: texture coordinates (u, v)
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
   glEnableVertexAttribArray(2);
 
   // Unbind the VBO for tetrahedron
