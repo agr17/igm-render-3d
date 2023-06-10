@@ -9,6 +9,7 @@
 // GLM library to deal with matrix operations
 #include <glm/glm.hpp>
 #include <glm/mat4x4.hpp> // glm::mat4
+#include <glm/gtc/matrix_inverse.hpp> // glm::inverseTranspose
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::perspective
 #include <glm/gtc/type_ptr.hpp>
 
@@ -305,7 +306,7 @@ void render(double currentTime) {
   glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj_matrix));
   
   // Normal matrix: normal vectors to world coordinates
-  normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_matrix)));
+  normal_matrix = glm::inverseTranspose(glm::mat3(model_matrix));
   glUniformMatrix3fv(normal_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));
 
   glDrawArrays(GL_TRIANGLES, 0, 36);
