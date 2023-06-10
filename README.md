@@ -27,7 +27,7 @@ sudo apt install python-tk
 Ejecución del código:
 
 ```sh
-python2 raytracing.py
+python2 ray-tracing/raytracing.py
 ```
 
 ### Ejercicio 1
