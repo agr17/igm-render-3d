@@ -10,11 +10,25 @@ A partir del código base de _spinningcube_withlight_SKEL.cpp_ se implementará 
 
 Se realizarán diversas mejoras sobre el el siguiente proyecto base: https://gist.github.com/rossant/6046463
 
-pip install numpy
+Instalación de dependencias:
 
-pip install matplotlib
+```sh
+sudo apt install python2
 
-python3 raytracing.py
+sudo apt install python-pip
+
+sudo pip2 install numpy
+
+sudo pip2 install matplotlib
+
+sudo apt install python-tk
+```
+
+Ejecución del código:
+
+```sh
+python2 raytracing.py
+```
 
 ### Ejercicio 1
 Para modificar as fontes de luz deberán modificarse as variables L (posición da fonte de luz) e color_light (cor da fonte de luz). Para engadir unha nova fonte de luz poderán crearse 2 novas variables (L4 e color_light4) e engadindoas ás listas L e color_light poderá verse a nova fonte de luz no ficheiro fig.png unha vez executado o código.

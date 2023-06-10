@@ -72,17 +72,17 @@ def intersect_triangle(O, D, vertices, N):
 
     v0, v1, v2 = vertices
 
-    # Calcular la intersección del triángulo con el plano
+    # Calcular la interseccion del triangulo con el plano
     t = intersect_plane(O, D, v0, N)
 
-    # Si no hay intersección entre el rayo y el triángulo
+    # Si no hay interseccion entre el rayo y el triangulo
     if t == np.inf:
         return np.inf
 
-    # Calcular el punto de intersección entre el rayo y el triángulo
+    # Calcular el punto de interseccion entre el rayo y el triangulo
     P = O + t * D
 
-    # Comprobar si el punto de intersección está dentro del triángulo
+    # Comprobar si el punto de interseccion esta dentro del triangulo
     if is_inside_triangle(P, v0, v1, v2):
         return t
 
@@ -90,7 +90,7 @@ def intersect_triangle(O, D, vertices, N):
 
 
 def is_inside_triangle(P, v0, v1, v2):
-    # Comprobar si el punto P está dentro del triángulo definido por sus vértices
+    # Comprobar si el punto P esta dentro del triangulo definido por sus vertices
     C0 = np.cross(v1 - v0, P - v0)
     C1 = np.cross(v2 - v1, P - v1)
     C2 = np.cross(v0 - v2, P - v2)
@@ -160,7 +160,7 @@ def trace_ray(rayO, rayD):
     toO = normalize(O - M)
 
     # Shadow: find if the point is shadowed or not.
-    # Un punto sólo está en sombra si ningún foco de luz lo ilumina
+    # Un punto solo esta en sombra si ningun foco de luz lo ilumina
     shadowed_all = True
     for toL in toLarray:
         l = [intersect(M + N * .0001, toL, obj_sh) for k, obj_sh in enumerate(scene) if k != obj_idx]
@@ -197,10 +197,10 @@ def is_normal_front_facing(normal):
 
 
 def add_triangle(vertices, color):
-    # Calcular la normal del triángulo
+    # Calcular la normal del triangulo
     N=get_normal_triangle(vertices)
     
-    # Verificar que la dirección de la normal sea hacia delante para que se vea el color
+    # Verificar que la direccion de la normal sea hacia delante para que se vea el color
     if not is_normal_front_facing(N):
         N *= -1
 
@@ -210,8 +210,8 @@ def add_triangle(vertices, color):
 color_plane0 = 1. * np.ones(3)
 color_plane1 = 0. * np.ones(3)
 scene = [add_sphere([.75, .1, 1.], .6, [0., 0., 1.]),
+         add_sphere([-.75, .1, 2.25], .6, [.5, .223, .5]),
          add_sphere([-2.75, .1, 3.5], .6, [1., .572, .184]),
-         add_triangle([np.array((-1.75, -.5, 2.25)), np.array((-0.75, 1.5, 2.25)), np.array((.25, -.5, 2.25))], (0., 0.5, 0.)),
          add_plane([0., -.5, 0.], [0., 1., 0.]),
     ]
 
@@ -237,20 +237,20 @@ specular_k = 50
 
 depth_max = 5  # Maximum number of light reflections.
 col = np.zeros(3)  # Current color.
-# O = np.array([0., 0.35, -1.])  # Posición de la cámara (frontal).
-O = np.array([0., 100., -200.])  # Posición de la cámara (desde arriba).
-Q = view_direction  # Cámara apuntando al centro de la escena.
+O = np.array([0., 0.35, -1.])  # Posicion de la camara (frontal).
+# O = np.array([0., 100., -200.])  # Posicion de la camara (desde arriba).
+Q = view_direction  # Camara apuntando al centro de la escena.
 img = np.zeros((h, w, 3))
 
 r = float(w) / h
 # Screen coordinates: x0, y0, x1, y1.
-# S = (-1., -1. / r + .25, 1., 1. / r + .25) # para vista frontal
-S = (-r, -1. + .25, r, 1. + .25) # para vista cenital, ajustar límites de pantalla
+S = (-1., -1. / r + .25, 1., 1. / r + .25) # para vista frontal
+# S = (-r, -1. + .25, r, 1. + .25) # para vista cenital, ajustar limites de pantalla
 
 # Loop through all pixels.
 for i, x in enumerate(np.linspace(S[0], S[2], w)):
     if i % 10 == 0:
-        print (i / float(w) * 100, "%")
+        print i / float(w) * 100, "%"
     for j, y in enumerate(np.linspace(S[1], S[3], h)):
         col[:] = 0
         Q[:2] = (x, y)
