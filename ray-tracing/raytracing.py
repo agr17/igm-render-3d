@@ -204,13 +204,13 @@ def add_triangle(vertices, color):
     if not is_normal_front_facing(N):
         N *= -1
 
-    return dict(type='triangle', vertices=[np.array(v) for v in vertices], color=np.array(color), normal=N, diffuse_c=.75, specular_c=.5, reflection=.25)
+    return dict(type='triangle', vertices=[np.array(v) for v in vertices], color=np.array(color), normal=N, diffuse_c=.75, specular_c=.5, reflection=0.)
 
 # List of objects.
 color_plane0 = 1. * np.ones(3)
 color_plane1 = 0. * np.ones(3)
 scene = [add_sphere([.75, .1, 1.], .6, [0., 0., 1.]),
-         add_sphere([-.75, .1, 2.25], .6, [.5, .223, .5]),
+         add_triangle([np.array((-1.75, -.5, 2.25)), np.array((-0.75, 1.5, 2.25)), np.array((.25, -.5, 2.25))], (0., 0.5, 0.)),
          add_sphere([-2.75, .1, 3.5], .6, [1., .572, .184]),
          add_plane([0., -.5, 0.], [0., 1., 0.]),
     ]
@@ -226,8 +226,9 @@ color_light1 = np.ones(3)
 color_light2 = np.array([1.0, 0.0, 0.0])
 color_light3 = np.array([0.0, 0.5, 0.0])
 
-L = [L1, L2, L3]
-color_light = [color_light1, color_light2, color_light3]
+# Luz L1 varias veces para que se pueda ver claramente como incide esa luz en el triangulo
+L = [L1, L1, L1, L1, L2, L3]
+color_light = [color_light1, color_light1, color_light1, color_light1, color_light1, color_light2, color_light3]
 
 # Default light and material parameters.
 ambient = .05
