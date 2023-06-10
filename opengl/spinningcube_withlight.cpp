@@ -12,7 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::perspective
 #include <glm/gtc/type_ptr.hpp>
 
-#include "textfile_ALT.h"
+#include "util/textfile_ALT.h"
 
 int gl_width = 640;
 int gl_height = 480;
@@ -28,8 +28,8 @@ GLint model_location, view_location, proj_location, normal_location, view_pos_lo
   light_amb_location, light_diff_location, light_spec_location, light_pos_location; // Uniforms for transformation matrices
 
 // Shader names
-const char *vertexFileName = "spinningcube_withlight_vs.glsl";
-const char *fragmentFileName = "spinningcube_withlight_fs.glsl";
+const char *vertexFileName = "shaders/spinningcube_withlight_vs.glsl";
+const char *fragmentFileName = "shaders/spinningcube_withlight_fs.glsl";
 
 // Camera
 glm::vec3 camera_pos(0.0f, 0.0f, 3.0f);
