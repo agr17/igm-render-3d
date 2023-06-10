@@ -20,14 +20,9 @@ Compilar y ejecutar simultáneamente:
 make run
 ```
 
-Eliminar archivos de la compilación:
-```sh
-make clean
-```
-
 Eliminar archivos de la compilación y ejecutable:
 ```sh
-make cleanall
+make clean
 ```
 
 ### Ejercicio 1
