@@ -27,13 +27,13 @@ make clean
 
 ### Ejercicio 1
 
-En este ejercicio se ha aplicado un _Phong shading_ básico, usando el cubo y la fuente de luz que venía en el código base. A continuación se adjunta una captura de pantalla con el render de la práctica y la versión de OpenGL en la sálida estándar del programa.
+En este ejercicio se ha aplicado un _Phong shading_ básico, usando el cubo y la fuente de luz que venía en el código base. A continuación se adjunta una captura de pantalla con el render de la práctica y la versión de OpenGL en la salida estándar del programa.
 
 ![opengl_ej1](https://github.com/agr17/igm-render-3d/assets/78569753/e3c41baa-656d-4a78-a449-7f999861557d)
 
 ### Ejercicio 2
 
-Se ha añadido un segundo modelo 3D a la escena, una pirámide triangular (un tetraedro) y un segundo punto de luz. Para tener dos modelos 3D, se ha creado una función _setupVertexArrayObject_ la cual encapsula código que se repetiría para ambos objetos. Para los puntos de luz, dado que solo tenemos dos y este número no va a aumentar, en el _Fragment Shader_ solo añadiremos _light_2_. A continuación se adjunta una captura de pantalla con el render de la práctica y la versión de OpenGL en la sálida estándar del programa. 
+Se ha añadido un segundo modelo 3D a la escena, una pirámide triangular (un tetraedro) y un segundo punto de luz. Para tener dos modelos 3D, se ha creado una función _setupVertexArrayObject_ la cual encapsula código que se repetiría para ambos objetos. Para los puntos de luz, dado que solo tenemos dos y este número no va a aumentar, en el _Fragment Shader_ solo añadiremos _light_2_. A continuación se adjunta una captura de pantalla con el render de la práctica y la versión de OpenGL en la salida estándar del programa. 
 
 ![opengl_ej2](https://github.com/agr17/igm-render-3d/assets/78569753/7748e415-0acc-4dc8-98f6-870799d2a6e3)
 
@@ -41,7 +41,7 @@ Se ha añadido un segundo modelo 3D a la escena, una pirámide triangular (un te
 
 Se nos pide añadir un mapa difuso a los modelos para el cálculo de _Phong_. Para ello se ha utilizado la imagen _container2.png_ disponible en el siguiente enlace [https://learnopengl.com/Lighting/Lighting-maps](https://learnopengl.com/Lighting/Lighting-maps). La razón por la cual se ha escogido esta imagen es que en el mismo enlace disponemos de un mapa especular, del que se hará uso en el Ejercico 4.
 
-A continuación se adjunta una captura de pantalla con el render de la práctica y la versión de OpenGL en la sálida estándar del programa. 
+A continuación se adjunta una captura de pantalla con el render de la práctica y la versión de OpenGL en la salida estándar del programa. 
 
 ![opengl_ej3](https://github.com/agr17/igm-render-3d/assets/78569753/9f57f0f1-f73e-4e11-8d26-9daf4772e846)
 
@@ -52,6 +52,14 @@ En este ejercicio añadimos un mapa especular, el cual permite comportamientos d
 Con ello, conseguimos que la luz se refleje más en la parte metalizada del cubo que en la madera, consiguiendo así un aspecto más realista. En la imagen siguiente podemos ver el resultado, pero se aprecia mejor al ejecutarlo, gracias al movimiento y al no perder calidad de imagen al capturar la pantalla. Igualmente, en la carpeta _images_ se han añadido más ejemplos (_opengl_ej4_b.png_, _opengl_ej4_c.png_ y _opengl_ej4_d.png_).
 
 ![opengl_ej4](https://github.com/agr17/igm-render-3d/assets/78569753/0fcfa370-2034-4034-8b5c-2112ceaa7c0f)
+
+### Ejercicio 5
+
+Se nos pide añadir una segunda cámara y que mediante un atajo de teclado se pueda conmutar entre ambas. Para esto, se ha creado un _array_ de cámaras y se podrá conmutar entre ellas con la tecla _tab_. Además, con las teclas 1 y 2 también se podrá realizar este cambio, siendo la primera para utilizar la cámara inicial y la segunda para utilizar una cámara que nos da una vista lateral de la escena.
+
+A continuación se adjunta una captura de pantalla con el render de la práctica, cambiando la vista a la segunda cámara, y la versión de OpenGL en la salida estándar del programa. 
+
+![opengl_ej5](https://github.com/agr17/igm-render-3d/assets/78569753/be4fa449-7faf-496a-90fd-23f20592b1d0)
 
 
 ## Ray Tracing
