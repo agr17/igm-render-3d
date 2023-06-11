@@ -45,6 +45,15 @@ A continuación se adjunta una captura de pantalla con el render de la práctica
 
 ![opengl_ej3](https://github.com/agr17/igm-render-3d/assets/78569753/9f57f0f1-f73e-4e11-8d26-9daf4772e846)
 
+### Ejercicio 4
+
+En este ejercicio añadimos un mapa especular, el cual permite comportamientos distintos del componente especular en función del punto iluminado en los modelos. En nuestro caso, el mapa especular utilizado es la imagen _container2_specular.png_ del enlace del Ejercicio 3, del tutorial de _Learn OpenGL_.
+
+Con ello, conseguimos que la luz se refleje más en la parte metalizada del cubo que en la madera, consiguiendo así un aspecto más realista. En la imagen siguiente podemos ver el resultado, pero se aprecia mejor al ejecutarlo, gracias al movimiento y al no perder calidad de imagen al capturar la pantalla. Igualmente, en la carpeta _images_ se han añadido más ejemplos.
+
+![opengl_ej4](https://github.com/agr17/igm-render-3d/assets/78569753/0fcfa370-2034-4034-8b5c-2112ceaa7c0f)
+
+
 ## Ray Tracing
 
 Se realizarán diversas mejoras sobre el el siguiente proyecto base: https://gist.github.com/rossant/6046463
