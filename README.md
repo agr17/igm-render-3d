@@ -43,7 +43,7 @@ Se nos pide añadir un mapa difuso a los modelos para el cálculo de _Phong_. Pa
 
 A continuación se adjunta una captura de pantalla con el render de la práctica y la versión de OpenGL en la sálida estándar del programa. 
 
-![opengl_ej3](https://github.com/agr17/igm-render-3d/assets/78569753/f763cad7-28d1-4a16-bbbe-09e3c72a561b)
+![opengl_ej3](https://github.com/agr17/igm-render-3d/assets/78569753/9f57f0f1-f73e-4e11-8d26-9daf4772e846)
 
 ## Ray Tracing
 
