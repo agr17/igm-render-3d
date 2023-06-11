@@ -31,6 +31,8 @@ En este ejercicio se ha aplicado un _Phong shading_ básico, usando el cubo y la
 
 ![opengl_ej1](https://github.com/agr17/igm-render-3d/assets/78569753/e3c41baa-656d-4a78-a449-7f999861557d)
 
+### Ejercicio 2
+
 ## Ray Tracing
 
 Se realizarán diversas mejoras sobre el el siguiente proyecto base: https://gist.github.com/rossant/6046463
