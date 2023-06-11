@@ -41,8 +41,15 @@ GLuint texture, specularMap = 0; // Texture object
 const char *vertexFileName = "shaders/spinningcube_withlight_vs.glsl";
 const char *fragmentFileName = "shaders/spinningcube_withlight_fs.glsl";
 
-// Camera
-glm::vec3 camera_pos(0.0f, 0.0f, 3.0f);
+// Cameras
+#define N_CAMERAS 2
+int currentCamera = 0;
+bool tabPressed = false; // Para evitar que se cambie de cámara varias veces con una sola pulsación de la tecla Tab
+
+glm::vec3 cameras[] = {
+  glm::vec3(0.0f, 0.0f, 3.0f), // camera_front
+  glm::vec3(2.0f, 2.0f, 0.0f), // camera_right_top
+};
 
 // Lighting
 glm::vec3 light_pos(1.2f, 1.0f, 2.0f);
@@ -299,7 +306,7 @@ void render(double currentTime) {
   glm::mat3 normal_matrix;
 
   // Uniforms
-  glUniform3f(view_pos_location, camera_pos.x, camera_pos.y, camera_pos.z);
+  glUniform3f(view_pos_location, cameras[currentCamera].x, cameras[currentCamera].y, cameras[currentCamera].z);
 
   glUniform1i(mat_diff_location, 0);
   glUniform1i(mat_spec_location, 1);
@@ -328,7 +335,7 @@ void render(double currentTime) {
 
   glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model_matrix));
 
-  view_matrix = glm::lookAt(                 camera_pos,  // pos
+  view_matrix = glm::lookAt(     cameras[currentCamera],  // pos
                             glm::vec3(0.0f, 0.0f, 0.0f),  // target
                             glm::vec3(0.0f, 1.0f, 0.0f)); // up
 
@@ -380,8 +387,27 @@ void render(double currentTime) {
 }
 
 void processInput(GLFWwindow *window) {
-  if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, 1);
+
+  if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) {
+    if (!tabPressed) {
+      // Acciones a realizar solo en la primera pulsación de la tecla Tab
+      tabPressed = true;
+      currentCamera = (currentCamera + 1) % N_CAMERAS;
+    }
+  } else {
+    // Restablecer el estado de tabPressed si la tecla Tab se ha soltado
+    tabPressed = false;
+  }
+
+  if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+    currentCamera = 0;
+  }
+  
+  if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+    currentCamera = 1;
+  }
 }
 
 // Callback function to track window size and update viewport
