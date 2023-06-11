@@ -30,7 +30,7 @@ GLuint setupVertexArrayObject(const GLfloat vertex_positions[], size_t num_eleme
 GLuint shader_program = 0; // shader program to set render pipeline
 GLuint vao, tetrahedron_vao = 0; // Vertext Array Object to set input data
 GLint model_location, view_location, proj_location, normal_location, view_pos_location, 
-  mat_amb_location, mat_diff_location, mat_spec_location, mat_shine_location, 
+  mat_diff_location, mat_spec_location, mat_shine_location, 
   light_amb_location, light_diff_location, light_spec_location, light_pos_location,
   light_2_amb_location, light_2_diff_location, light_2_spec_location, light_2_pos_location; // Uniforms for transformation matrices
 
@@ -52,8 +52,6 @@ glm::vec3 light_specular(1.0f, 1.0f, 1.0f);
 glm::vec3 light_2_pos(-1.2f, 1.0f, 2.0f);
 
 // Material
-glm::vec3 material_ambient(1.0f, 0.5f, 0.31f);
-glm::vec3 material_diffuse(1.0f, 0.5f, 0.31f);
 glm::vec3 material_specular(0.5f, 0.5f, 0.5f);
 const GLfloat material_shininess = 32.0f;
 
@@ -263,7 +261,6 @@ int main() {
   light_2_spec_location = glGetUniformLocation(shader_program, "light_2.specular");
   light_2_pos_location = glGetUniformLocation(shader_program, "light_2.position");
 
-  mat_amb_location = glGetUniformLocation(shader_program, "material.ambient");
   mat_diff_location = glGetUniformLocation(shader_program, "material.diffuse");
   mat_spec_location = glGetUniformLocation(shader_program, "material.specular");
   mat_shine_location = glGetUniformLocation(shader_program, "material.shininess");
@@ -338,8 +335,7 @@ void render(double currentTime) {
   // Uniforms
   glUniform3f(view_pos_location, camera_pos.x, camera_pos.y, camera_pos.z);
 
-  glUniform3f(mat_amb_location, material_ambient.x, material_ambient.y, material_ambient.z);
-  glUniform3f(mat_diff_location, material_diffuse.x, material_diffuse.y, material_diffuse.z);
+  glUniform1i(mat_diff_location, 0);
   glUniform3f(mat_spec_location, material_specular.x, material_specular.y, material_specular.z);
   glUniform1f(mat_shine_location, material_shininess);
 
@@ -383,6 +379,7 @@ void render(double currentTime) {
   glUniformMatrix3fv(normal_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));
 
   // Texture
+  glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture);
 
   glDrawArrays(GL_TRIANGLES, 0, 36);

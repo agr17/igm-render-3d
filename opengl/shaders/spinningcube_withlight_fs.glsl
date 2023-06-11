@@ -32,7 +32,7 @@ vec3 calculatePhong(Light light) {
 
   // Diffuse
   float diff = max(dot(vs_normal, light_dir), 0.0);
-  vec3 diffuse = light.diffuse * max(dot(vs_normal, light_dir), 0.0)
+  vec3 diffuse = light.diffuse * diff
     * vec3(texture(material.diffuse, vs_tex_coord));
 
   // Specular
