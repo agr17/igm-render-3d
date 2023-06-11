@@ -26,6 +26,7 @@ void processInput(GLFWwindow *window);
 void render(double);
 
 GLuint setupVertexArrayObject(const GLfloat vertex_positions[], size_t num_elements);
+unsigned int loadTexture(char const * path);
 
 GLuint shader_program = 0; // shader program to set render pipeline
 GLuint vao, tetrahedron_vao = 0; // Vertext Array Object to set input data
@@ -34,7 +35,7 @@ GLint model_location, view_location, proj_location, normal_location, view_pos_lo
   light_amb_location, light_diff_location, light_spec_location, light_pos_location,
   light_2_amb_location, light_2_diff_location, light_2_spec_location, light_2_pos_location; // Uniforms for transformation matrices
 
-GLuint texture = 0; // Texture object
+GLuint texture, specularMap = 0; // Texture object
 
 // Shader names
 const char *vertexFileName = "shaders/spinningcube_withlight_vs.glsl";
@@ -52,7 +53,6 @@ glm::vec3 light_specular(1.0f, 1.0f, 1.0f);
 glm::vec3 light_2_pos(-1.2f, 1.0f, 2.0f);
 
 // Material
-glm::vec3 material_specular(0.5f, 0.5f, 0.5f);
 const GLfloat material_shininess = 32.0f;
 
 int main() {
@@ -265,42 +265,8 @@ int main() {
   mat_spec_location = glGetUniformLocation(shader_program, "material.specular");
   mat_shine_location = glGetUniformLocation(shader_program, "material.shininess");
 
-  // Create texture object
-  glGenTextures(1, &texture);
-  glBindTexture(GL_TEXTURE_2D, texture);
-
-  // Set the texture wrapping/filtering options (on the currently bound texture object)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  // Load image for texture
-  int width, height, nrChannels;
-  // Before loading the image, we flip it vertically because
-  // Images: 0.0 top of y-axis  OpenGL: 0.0 bottom of y-axis
-  stbi_set_flip_vertically_on_load(1);
-  unsigned char *data = stbi_load("maps/container2.png", &width, &height, &nrChannels, 0);
-  // maps/container2.png
-  // Image from http://www.flickr.com/photos/seier/4364156221
-  // CC-BY-SA 2.0
-  if (data) {
-    GLenum format;
-    if (nrChannels == 1)
-        format = GL_RED;
-    else if (nrChannels == 3)
-        format = GL_RGB;
-    else if (nrChannels == 4)
-        format = GL_RGBA;
-    // Generate texture from image
-    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-  } else {
-    printf("Failed to load texture\n");
-  }
-
-  // Free image once texture is generated
-  stbi_image_free(data);
+  texture = loadTexture("maps/container2.png");
+  specularMap = loadTexture("maps/container2_specular.png");
 
 // Render loop
   while(!glfwWindowShouldClose(window)) {
@@ -336,7 +302,7 @@ void render(double currentTime) {
   glUniform3f(view_pos_location, camera_pos.x, camera_pos.y, camera_pos.z);
 
   glUniform1i(mat_diff_location, 0);
-  glUniform3f(mat_spec_location, material_specular.x, material_specular.y, material_specular.z);
+  glUniform1i(mat_spec_location, 1);
   glUniform1f(mat_shine_location, material_shininess);
 
   glUniform3f(light_amb_location, light_ambient.x, light_ambient.y, light_ambient.z);
@@ -381,6 +347,8 @@ void render(double currentTime) {
   // Texture
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, specularMap);
 
   glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -455,4 +423,43 @@ GLuint setupVertexArrayObject(const GLfloat vertex_positions[], size_t num_eleme
   glBindVertexArray(0);
 
   return vao;
+}
+
+// utility function for loading a 2D texture from file
+// ---------------------------------------------------
+unsigned int loadTexture(char const * path)
+{
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+
+    int width, height, nrComponents;
+    unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
+    if (data)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        // Set the texture wrapping/filtering options (on the currently bound texture object)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    }
+    else
+    {
+        printf("Failed to load second texture\n");
+    }
+
+    return textureID;
 }

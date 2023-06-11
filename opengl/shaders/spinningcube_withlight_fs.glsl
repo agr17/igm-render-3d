@@ -2,7 +2,7 @@
 
 struct Material {
   sampler2D diffuse;
-  vec3 specular;
+  sampler2D specular;
   float shininess;
 };
 
@@ -39,7 +39,8 @@ vec3 calculatePhong(Light light) {
   vec3 view_dir = normalize(view_pos - frag_3Dpos);
   vec3 reflect_dir = reflect(-light_dir, vs_normal);
   float spec = pow(max(dot(view_dir, reflect_dir), 0.0), material.shininess);
-  vec3 specular = light.specular * spec * material.specular;
+  vec3 specular = light.specular * spec
+    * vec3(texture(material.specular, vs_tex_coord));
 
   return ambient + diffuse + specular;
 }
