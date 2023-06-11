@@ -37,6 +37,13 @@ Se ha añadido un segundo modelo 3D a la escena, una pirámide triangular (un te
 
 ![opengl_ej2](https://github.com/agr17/igm-render-3d/assets/78569753/7748e415-0acc-4dc8-98f6-870799d2a6e3)
 
+### Ejercicio 3
+
+Se nos pide añadir un mapa difuso a los modelos para el cálculo de _Phong_. Para ello se ha utilizado la imagen _container2.png_ disponible en el siguiente enlace [https://learnopengl.com/Lighting/Lighting-maps](https://learnopengl.com/Lighting/Lighting-maps). La razón por la cual se ha escogido esta imagen es que en el mismo enlace disponemos de un mapa especular, del que se hará uso en el Ejercico 4.
+
+A continuación se adjunta una captura de pantalla con el render de la práctica y la versión de OpenGL en la sálida estándar del programa. 
+
+![opengl_ej3](https://github.com/agr17/igm-render-3d/assets/78569753/f763cad7-28d1-4a16-bbbe-09e3c72a561b)
 
 ## Ray Tracing
 
