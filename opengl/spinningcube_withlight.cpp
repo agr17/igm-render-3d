@@ -15,6 +15,9 @@
 
 #include "util/textfile_ALT.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "util/stb_image.h"
+
 int gl_width = 640;
 int gl_height = 480;
 
@@ -30,6 +33,8 @@ GLint model_location, view_location, proj_location, normal_location, view_pos_lo
   mat_amb_location, mat_diff_location, mat_spec_location, mat_shine_location, 
   light_amb_location, light_diff_location, light_spec_location, light_pos_location,
   light_2_amb_location, light_2_diff_location, light_2_spec_location, light_2_pos_location; // Uniforms for transformation matrices
+
+GLuint texture = 0; // Texture object
 
 // Shader names
 const char *vertexFileName = "shaders/spinningcube_withlight_vs.glsl";
@@ -156,47 +161,47 @@ int main() {
   //       6        5
   //
   const GLfloat vertex_positions[] = {
-    -0.25f, -0.25f, -0.25f, 0.0f,  0.0f, -1.0f, // 1
-    -0.25f,  0.25f, -0.25f, 0.0f,  0.0f, -1.0f, // 0
-     0.25f, -0.25f, -0.25f, 0.0f,  0.0f, -1.0f, // 2
-     0.25f,  0.25f, -0.25f, 0.0f,  0.0f, -1.0f, // 3
-     0.25f, -0.25f, -0.25f, 0.0f,  0.0f, -1.0f, // 2
-    -0.25f,  0.25f, -0.25f, 0.0f,  0.0f, -1.0f, // 0
+    -0.25f, -0.25f, -0.25f, 0.0f,  0.0f, -1.0f, 1.0f, 0.0f, // 1
+    -0.25f,  0.25f, -0.25f, 0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // 0
+     0.25f, -0.25f, -0.25f, 0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // 2
+     0.25f,  0.25f, -0.25f, 0.0f,  0.0f, -1.0f, 0.0f, 1.0f, // 3
+     0.25f, -0.25f, -0.25f, 0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // 2
+    -0.25f,  0.25f, -0.25f, 0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // 0
 
-     0.25f, -0.25f, -0.25f, 1.0f,  0.0f,  0.0f, // 2
-     0.25f,  0.25f, -0.25f, 1.0f,  0.0f,  0.0f, // 3
-     0.25f, -0.25f,  0.25f, 1.0f,  0.0f,  0.0f, // 5
-     0.25f,  0.25f,  0.25f, 1.0f,  0.0f,  0.0f, // 4
-     0.25f, -0.25f,  0.25f, 1.0f,  0.0f,  0.0f, // 5
-     0.25f,  0.25f, -0.25f, 1.0f,  0.0f,  0.0f, // 3
+     0.25f, -0.25f, -0.25f, 1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // 2
+     0.25f,  0.25f, -0.25f, 1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // 3
+     0.25f, -0.25f,  0.25f, 1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // 5
+     0.25f,  0.25f,  0.25f, 1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // 4
+     0.25f, -0.25f,  0.25f, 1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // 5
+     0.25f,  0.25f, -0.25f, 1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // 3
 
-     0.25f, -0.25f,  0.25f, 0.0f,  0.0f,  1.0f, // 5
-     0.25f,  0.25f,  0.25f, 0.0f,  0.0f,  1.0f, // 4
-    -0.25f, -0.25f,  0.25f, 0.0f,  0.0f,  1.0f, // 6
-    -0.25f,  0.25f,  0.25f, 0.0f,  0.0f,  1.0f, // 7
-    -0.25f, -0.25f,  0.25f, 0.0f,  0.0f,  1.0f, // 6
-     0.25f,  0.25f,  0.25f, 0.0f,  0.0f,  1.0f, // 4
+     0.25f, -0.25f,  0.25f, 0.0f,  0.0f,  1.0f, 1.0f, 0.0f, // 5
+     0.25f,  0.25f,  0.25f, 0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // 4
+    -0.25f, -0.25f,  0.25f, 0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // 6
+    -0.25f,  0.25f,  0.25f, 0.0f,  0.0f,  1.0f, 0.0f, 1.0f, // 7
+    -0.25f, -0.25f,  0.25f, 0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // 6
+     0.25f,  0.25f,  0.25f, 0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // 4
 
-    -0.25f, -0.25f,  0.25f, -1.0f,  0.0f,  0.0f, // 6
-    -0.25f,  0.25f,  0.25f, -1.0f,  0.0f,  0.0f, // 7
-    -0.25f, -0.25f, -0.25f, -1.0f,  0.0f,  0.0f, // 1
-    -0.25f,  0.25f, -0.25f, -1.0f,  0.0f,  0.0f, // 0
-    -0.25f, -0.25f, -0.25f, -1.0f,  0.0f,  0.0f, // 1
-    -0.25f,  0.25f,  0.25f, -1.0f,  0.0f,  0.0f, // 7
+    -0.25f, -0.25f,  0.25f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // 6
+    -0.25f,  0.25f,  0.25f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // 7
+    -0.25f, -0.25f, -0.25f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // 1
+    -0.25f,  0.25f, -0.25f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // 0
+    -0.25f, -0.25f, -0.25f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // 1
+    -0.25f,  0.25f,  0.25f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // 7
 
-     0.25f, -0.25f, -0.25f, 0.0f, -1.0f,  0.0f, // 2
-     0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, // 5
-    -0.25f, -0.25f, -0.25f, 0.0f, -1.0f,  0.0f, // 1
-    -0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, // 6
-    -0.25f, -0.25f, -0.25f, 0.0f, -1.0f,  0.0f, // 1
-     0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, // 5
+     0.25f, -0.25f, -0.25f, 0.0f, -1.0f,  0.0f, 1.0f, 1.0f, // 2
+     0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // 5
+    -0.25f, -0.25f, -0.25f, 0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // 1
+    -0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // 6
+    -0.25f, -0.25f, -0.25f, 0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // 1
+     0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // 5
 
-     0.25f,  0.25f,  0.25f, 0.0f,  1.0f,  0.0f, // 4
-     0.25f,  0.25f, -0.25f, 0.0f,  1.0f,  0.0f, // 3
-    -0.25f,  0.25f,  0.25f, 0.0f,  1.0f,  0.0f, // 7
-    -0.25f,  0.25f, -0.25f, 0.0f,  1.0f,  0.0f, // 0
-    -0.25f,  0.25f,  0.25f, 0.0f,  1.0f,  0.0f, // 7
-     0.25f,  0.25f, -0.25f, 0.0f,  1.0f,  0.0f  // 3
+     0.25f,  0.25f,  0.25f, 0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // 4
+     0.25f,  0.25f, -0.25f, 0.0f,  1.0f,  0.0f, 1.0f, 1.0f, // 3
+    -0.25f,  0.25f,  0.25f, 0.0f,  1.0f,  0.0f, 0.0f, 0.0f, // 7
+    -0.25f,  0.25f, -0.25f, 0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // 0
+    -0.25f,  0.25f,  0.25f, 0.0f,  1.0f,  0.0f, 0.0f, 0.0f, // 7
+     0.25f,  0.25f, -0.25f, 0.0f,  1.0f,  0.0f, 1.0f, 1.0f  // 3
   };
 
   // Tetrahedron to be rendered (based on cube_vertex_positions)
@@ -212,25 +217,25 @@ int main() {
     // ec. plano: 16x - 4y + 8z + 1 = 0
     // vec. normal: (16, -4, 8) -> invertir direccion
     // vec. normalizado: (0.873f, -0.218f, 0.436f) -> invertir direccion
-    0.00f,   0.25f,  0.00f, -0.873f, 0.218f, -0.436f, // 0
-    0.00f,  -0.25f, -0.25f, -0.873f, 0.218f, -0.436f, // 1
-    -0.25f, -0.25f,  0.25f, -0.873f, 0.218f, -0.436f, // 2
+    0.00f,   0.25f,  0.00f, -0.873f, 0.218f, -0.436f, 0.5f, 1.0f, // 0
+    0.00f,  -0.25f, -0.25f, -0.873f, 0.218f, -0.436f, 0.0f, 0.0f, // 1
+    -0.25f, -0.25f,  0.25f, -0.873f, 0.218f, -0.436f, 1.0f, 0.0f, // 2
 
     // ec. plano: 16x + 4y - 8z - 1 = 0
     // vec. normal: (16, 4, -8)
-     0.00f,  0.25f,  0.00f, 0.873f, 0.218f, -0.436f, // 0
-     0.00f, -0.25f, -0.25f, 0.873f, 0.218f, -0.436f, // 1
-     0.25f, -0.25f,  0.25f, 0.873f, 0.218f, -0.436f, // 3
+     0.00f,  0.25f,  0.00f, 0.873f, 0.218f, -0.436f, 0.5f, 1.0f, // 0
+     0.00f, -0.25f, -0.25f, 0.873f, 0.218f, -0.436f, 1.0f, 0.0f, // 1
+     0.25f, -0.25f,  0.25f, 0.873f, 0.218f, -0.436f, 0.0f, 0.0f, // 3
 
     // ec. plano: 4y + 8z - 1 = 0
     // vec. normal: (0, 4, 8)
-     0.00f,  0.25f, 0.00f, 0.000f, 0.447f, 0.894f, // 0
-    -0.25f, -0.25f, 0.25f, 0.000f, 0.447f, 0.894f, // 2
-     0.25f, -0.25f, 0.25f, 0.000f, 0.447f, 0.894f, // 3
+     0.00f,  0.25f, 0.00f, 0.000f, 0.447f, 0.894f, 0.5f, 1.0f, // 0
+    -0.25f, -0.25f, 0.25f, 0.000f, 0.447f, 0.894f, 0.0f, 0.0f, // 2
+     0.25f, -0.25f, 0.25f, 0.000f, 0.447f, 0.894f, 1.0f, 0.0f, // 3
 
-     0.00f, -0.25f, -0.25f, 0.0f, -1.0f,  0.0f, // 1
-    -0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, // 2
-     0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f // 3
+     0.00f, -0.25f, -0.25f, 0.0f, -1.0f,  0.0f, 0.5f, 1.0f, // 1
+    -0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // 2
+     0.25f, -0.25f,  0.25f, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f  // 3
   };
 
   // Vertex Array Object
@@ -262,6 +267,43 @@ int main() {
   mat_diff_location = glGetUniformLocation(shader_program, "material.diffuse");
   mat_spec_location = glGetUniformLocation(shader_program, "material.specular");
   mat_shine_location = glGetUniformLocation(shader_program, "material.shininess");
+
+  // Create texture object
+  glGenTextures(1, &texture);
+  glBindTexture(GL_TEXTURE_2D, texture);
+
+  // Set the texture wrapping/filtering options (on the currently bound texture object)
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  // Load image for texture
+  int width, height, nrChannels;
+  // Before loading the image, we flip it vertically because
+  // Images: 0.0 top of y-axis  OpenGL: 0.0 bottom of y-axis
+  stbi_set_flip_vertically_on_load(1);
+  unsigned char *data = stbi_load("maps/container2.png", &width, &height, &nrChannels, 0);
+  // maps/container2.png
+  // Image from http://www.flickr.com/photos/seier/4364156221
+  // CC-BY-SA 2.0
+  if (data) {
+    GLenum format;
+    if (nrChannels == 1)
+        format = GL_RED;
+    else if (nrChannels == 3)
+        format = GL_RGB;
+    else if (nrChannels == 4)
+        format = GL_RGBA;
+    // Generate texture from image
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+  } else {
+    printf("Failed to load texture\n");
+  }
+
+  // Free image once texture is generated
+  stbi_image_free(data);
 
 // Render loop
   while(!glfwWindowShouldClose(window)) {
@@ -340,6 +382,10 @@ void render(double currentTime) {
   normal_matrix = glm::inverseTranspose(glm::mat3(model_matrix));
   glUniformMatrix3fv(normal_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));
 
+  // Texture
+  //glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture);
+
   glDrawArrays(GL_TRIANGLES, 0, 36);
 
   // Bind tetrahedron vao
@@ -365,6 +411,10 @@ void render(double currentTime) {
   // Normal matrix: normal vectors to world coordinates
   normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_tetrahedron)));
   glUniformMatrix3fv(normal_location, 1, GL_FALSE, glm::value_ptr(normal_matrix)); 
+
+  // Texture
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture);
 
   glDrawArrays(GL_TRIANGLES, 0, 36);
 }
@@ -395,12 +445,16 @@ GLuint setupVertexArrayObject(const GLfloat vertex_positions[], size_t num_eleme
 
   // Vertex attributes
   // 0: vertex position (x, y, z)
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)0);
   glEnableVertexAttribArray(0);
 
   // 1: vertex normals (x, y, z)
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
+
+  // 2: vertex texture coordinates (u, v)
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(float)));
+  glEnableVertexAttribArray(2);
 
   // Unbind vbo (it was conveniently registered by VertexAttribPointer)
   glBindBuffer(GL_ARRAY_BUFFER, 0);

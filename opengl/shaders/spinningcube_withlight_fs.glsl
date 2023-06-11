@@ -1,8 +1,7 @@
 #version 130
 
 struct Material {
-  vec3 ambient;
-  vec3 diffuse;
+  sampler2D diffuse;
   vec3 specular;
   float shininess;
 };
@@ -27,13 +26,14 @@ uniform vec3 view_pos;
 
 vec3 calculatePhong(Light light) {
   // Ambient
-  vec3 ambient = light.ambient * material.ambient;
+  vec3 ambient = light.ambient * vec3(texture(material.diffuse, vs_tex_coord));
 
   vec3 light_dir = normalize(light.position - frag_3Dpos);
 
   // Diffuse
   float diff = max(dot(vs_normal, light_dir), 0.0);
-  vec3 diffuse = light.diffuse * diff * material.diffuse;
+  vec3 diffuse = light.diffuse * max(dot(vs_normal, light_dir), 0.0)
+    * vec3(texture(material.diffuse, vs_tex_coord));
 
   // Specular
   vec3 view_dir = normalize(view_pos - frag_3Dpos);
