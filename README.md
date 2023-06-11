@@ -49,7 +49,7 @@ A continuación se adjunta una captura de pantalla con el render de la práctica
 
 En este ejercicio añadimos un mapa especular, el cual permite comportamientos distintos del componente especular en función del punto iluminado en los modelos. En nuestro caso, el mapa especular utilizado es la imagen _container2_specular.png_ del enlace del Ejercicio 3, del tutorial de _Learn OpenGL_.
 
-Con ello, conseguimos que la luz se refleje más en la parte metalizada del cubo que en la madera, consiguiendo así un aspecto más realista. En la imagen siguiente podemos ver el resultado, pero se aprecia mejor al ejecutarlo, gracias al movimiento y al no perder calidad de imagen al capturar la pantalla. Igualmente, en la carpeta _images_ se han añadido más ejemplos.
+Con ello, conseguimos que la luz se refleje más en la parte metalizada del cubo que en la madera, consiguiendo así un aspecto más realista. En la imagen siguiente podemos ver el resultado, pero se aprecia mejor al ejecutarlo, gracias al movimiento y al no perder calidad de imagen al capturar la pantalla. Igualmente, en la carpeta _images_ se han añadido más ejemplos (_opengl_ej4_b.png_, _opengl_ej4_c.png_ y _opengl_ej4_d.png_).
 
 ![opengl_ej4](https://github.com/agr17/igm-render-3d/assets/78569753/0fcfa370-2034-4034-8b5c-2112ceaa7c0f)
 
