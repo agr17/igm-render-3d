@@ -22,6 +22,8 @@ void glfw_window_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 void render(double);
 
+GLuint setupVertexArrayObject(const GLfloat vertex_positions[], size_t num_elements);
+
 GLuint shader_program = 0; // shader program to set render pipeline
 GLuint vao, tetrahedron_vao = 0; // Vertext Array Object to set input data
 GLint model_location, view_location, proj_location, normal_location, view_pos_location, 
@@ -229,54 +231,11 @@ int main() {
   };
 
   // Vertex Array Object
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
-
-  // Vertex Buffer Object (for vertex coordinates)
-  GLuint vbo = 0;
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions), vertex_positions, GL_STATIC_DRAW);
-
-  // Vertex attributes
-  // 0: vertex position (x, y, z)
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-  glEnableVertexAttribArray(0);
-
-  // 1: vertex normals (x, y, z)
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-  glEnableVertexAttribArray(1);
-
-  // Unbind vbo (it was conveniently registered by VertexAttribPointer)
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-  // Unbind vao
-  glBindVertexArray(0);
-
-  // Tetrahedron Vertex Array Object
-  glGenVertexArrays(1, &tetrahedron_vao);
-  glBindVertexArray(tetrahedron_vao);
-
-  // Vertex Buffer Object (for tetrahedron vertex coordinates)
-  vbo = 0;
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(tetrahedron_vertex_positions), tetrahedron_vertex_positions, GL_STATIC_DRAW);
-
-  // Vertex attributes
-  // 0: vertex position (x, y, z)
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-  glEnableVertexAttribArray(0);
-
-  // 1: vertex normals (x, y, z)
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-  glEnableVertexAttribArray(1);
-
-  // Unbind vbo (it was conveniently registered by VertexAttribPointer)
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-  // Unbind vao
-  glBindVertexArray(0);
+  size_t num_elements = sizeof(vertex_positions) / sizeof(GLfloat);
+  vao = setupVertexArrayObject(vertex_positions, num_elements);
+  
+  num_elements = sizeof(tetrahedron_vertex_positions) / sizeof(GLfloat);
+  tetrahedron_vao = setupVertexArrayObject(tetrahedron_vertex_positions, num_elements);
 
   // Uniforms
   model_location = glGetUniformLocation(shader_program, "model");
@@ -407,4 +366,34 @@ void glfw_window_size_callback(GLFWwindow* window, int width, int height) {
   gl_width = width;
   gl_height = height;
   printf("New viewport: (width: %d, height: %d)\n", width, height);
+}
+
+GLuint setupVertexArrayObject(const GLfloat vertex_positions[], size_t num_elements) {
+  GLuint vao, vbo = 0;
+
+  // Vertex Array Object
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+
+  // Vertex Buffer Object (for vertex coordinates)
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, num_elements * sizeof(GLfloat), vertex_positions, GL_STATIC_DRAW);
+
+  // Vertex attributes
+  // 0: vertex position (x, y, z)
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
+  glEnableVertexAttribArray(0);
+
+  // 1: vertex normals (x, y, z)
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
+
+  // Unbind vbo (it was conveniently registered by VertexAttribPointer)
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+  // Unbind vao
+  glBindVertexArray(0);
+
+  return vao;
 }
