@@ -27,11 +27,16 @@ make clean
 
 ### Ejercicio 1
 
-En este ejercicio se ha aplicado un _Phong shading_ básico, usando el cubo y la fuente de luz que venía en el código base. A continuación se adjunta una captura de pantalla con el render de la práctica y la versión de OpenGL ne la sálida estándar del programa.
+En este ejercicio se ha aplicado un _Phong shading_ básico, usando el cubo y la fuente de luz que venía en el código base. A continuación se adjunta una captura de pantalla con el render de la práctica y la versión de OpenGL en la sálida estándar del programa.
 
 ![opengl_ej1](https://github.com/agr17/igm-render-3d/assets/78569753/e3c41baa-656d-4a78-a449-7f999861557d)
 
 ### Ejercicio 2
+
+Se ha añadido un segundo modelo 3D a la escena, una pirámide triangular (un tetraedro) y un segundo punto de luz. Para tener dos modelos 3D, se ha creado una función _setupVertexArrayObject_ la cual encapsula código que se repetiría para ambos objetos. Para los puntos de luz, dado que solo tenemos dos y este número no va a aumentar, en el _Fragment Shader_ solo añadiremos _light_2_. A continuación se adjunta una captura de pantalla con el render de la práctica y la versión de OpenGL en la sálida estándar del programa. 
+
+![opengl_ej2](https://github.com/agr17/igm-render-3d/assets/78569753/7748e415-0acc-4dc8-98f6-870799d2a6e3)
+
 
 ## Ray Tracing
 
