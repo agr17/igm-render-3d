@@ -383,7 +383,6 @@ void render(double currentTime) {
   glUniformMatrix3fv(normal_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));
 
   // Texture
-  //glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture);
 
   glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -411,10 +410,6 @@ void render(double currentTime) {
   // Normal matrix: normal vectors to world coordinates
   normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_tetrahedron)));
   glUniformMatrix3fv(normal_location, 1, GL_FALSE, glm::value_ptr(normal_matrix)); 
-
-  // Texture
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, texture);
 
   glDrawArrays(GL_TRIANGLES, 0, 36);
 }
