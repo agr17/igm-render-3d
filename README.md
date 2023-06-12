@@ -1,6 +1,11 @@
 # Render 3D
 
-Práctica de la asignatura Interacción, Gráficos e Multimedia sobre Render 3D, en la que  se trabajará con OpenGL y Python
+Práctica de la asignatura Interacción, Gráficos e Multimedia sobre Render 3D, en la que  se trabajará con OpenGL y Python.
+
+Autores:
+
+* Pablo Boo Iglesias (pablo.boo@udc.es)
+* Ángel Regueiro Feal (a.regueiro.feal@udc.es)
 
 ## OpenGL
 
